@@ -24,6 +24,11 @@ jobs:
     - name: Run Docker Container
       run: docker run my-docker-image
 
+    - name: Set Python Path
+      run: |
+        export PYTHONPATH=$PYTHONPATH:$GITHUB_WORKSPACE/src
+        echo "PYTHONPATH: $PYTHONPATH"
+
     - name: Compile and Run Tests
       run: |
         # Compile the Python test cases file
