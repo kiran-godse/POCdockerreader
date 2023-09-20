@@ -33,7 +33,59 @@ jobs:
       run: |
        # Compile the Python test cases file
        python -m py_compile src/tests/tests.py
-       # Change to the directory where the tests are located
+       # Change to the directory where the tests are locatedname: CI
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+      with:
+        dockerfile: docker/Dockerfile
+
+    - name: Build Docker Image
+      run: docker build -t my-docker-image -f docker/Dockerfile .
+
+    - name: Run Docker Container
+      run: docker run my-docker-image
+
+    - name: Set Python Path
+      run: |
+        export PYTHONPATH=$GITHUB_WORKSPACE/src:$PYTHONPATH
+        echo "PYTHONPATH: $PYTHONPATH"
+
+    - name: Compile and Run Tests
+      run: |
+        # Compile the Python test cases file
+        python -m py_compile src/tests/tests.py
+
+        # Change to the directory where the tests are located
+        cd src/tests
+
+        # Set the Python path to include the workspace directory
+        export PYTHONPATH=$PYTHONPATH:$GITHUB_WORKSPACE/src
+
+        # Run the compiled test cases using unittest
+        python -m unittest tests
+
+    - name: Show Docker Image
+      run: docker images
+
+    - name: Show Running Containers
+      run: docker ps -a
+
+    # Add more steps as needed for your CI/CD pipeline.
+
        cd src/tests
        # Run the compiled test cases using unittest
        python -m unittest tests
