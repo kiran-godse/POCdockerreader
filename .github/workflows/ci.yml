@@ -32,9 +32,10 @@ jobs:
     - name: Compile and Run Tests
       run: |
         # Compile the Python test cases file
-        python -m py_compile src/tests.py
+        python -m py_compile src/tests/tests.py
         # Run the compiled test cases using unittest
-        python -m unittest src.tests
+        python -m unittest src/tests/tests
+
 
     - name: Show Docker Image
       run: docker images
