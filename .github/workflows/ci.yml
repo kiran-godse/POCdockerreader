@@ -20,13 +20,17 @@ jobs:
 
     - name: Build Docker Image
       run: docker build -t my-docker-image -f docker/Dockerfile .
- 
 
     - name: Run Docker Container
+      run: docker run my-docker-image
+
+    - name: Compile and Run Tests
       run: |
-        output=$(docker run my-docker-image)
-        echo "$output"  # This will display the output in the GitHub Actions logs
-        echo "::set-output name=output::$output"  # This will set the output as a workflow output
+        # Compile the Python test cases file
+        python -m py_compile src/tests.py
+
+        # Run the compiled test cases using unittest
+        python -m unittest src.tests
 
     - name: Show Docker Image
       run: docker images
@@ -34,8 +38,4 @@ jobs:
     - name: Show Running Containers
       run: docker ps -a
 
-    - name: Use Docker Output
-      run: |
-        docker_output="${{ steps.docker.outputs.output }}"
-        echo "Docker Output: $docker_output"  # Display the captured output
-        # You can use 'docker_output' as needed in your workflow
+    # Add more steps as needed for your CI/CD pipeline.
