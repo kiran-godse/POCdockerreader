@@ -1,6 +1,9 @@
 name: CI
 
-on: [push]
+on:
+  push:
+    branches:
+      - main
 
 jobs:
   build:
@@ -10,13 +13,23 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v1  # Use docker/setup-buildx-action
+    - name: Set up Docker
+      uses: docker/setup-action@v2
       with:
-        version: 'latest'  # Specify the desired Docker Buildx version
+        dockerfile: docker/Dockerfile
 
-    - name: Build Docker image
+    - name: Build Docker Image
       run: docker build -t my-docker-image .
 
-    - name: Run Docker container
+    - name: Run Docker Container
       run: docker run my-docker-image
+
+    # Add additional steps here, such as running tests inside the Docker container.
+
+    - name: Show Docker Image
+      run: docker images
+
+    - name: Show Running Containers
+      run: docker ps -a
+
+    # Add more steps as needed for your CI/CD pipeline.
