@@ -1,7 +1,7 @@
 # tests.py
 
 import unittest
-from app import add  # Use an absolute import
+from app import add
 
 class TestApp(unittest.TestCase):
 
@@ -16,6 +16,10 @@ class TestApp(unittest.TestCase):
     def test_add_mixed_numbers(self):
         result = add(3, -5)
         self.assertEqual(result, -2)
+
+    def test_failing_test(self):
+        # This test intentionally fails
+        self.assertEqual(1, 2)
 
 if __name__ == '__main__':
     unittest.main()
