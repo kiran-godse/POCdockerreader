@@ -19,14 +19,13 @@ jobs:
         dockerfile: docker/Dockerfile
 
     - name: Build Docker Image
-      run: docker build -t my-docker-image -f docker/Dockerfile .
-      working-directory: ${{ github.workspace }}
+      run: docker build -t my-docker-image .
 
     - name: Run Docker Container
-      run: docker run -d my-docker-image
-      # Add environment variables and port bindings as needed.
-
-    # Add steps for testing or artifact generation within the Docker container if required.
+      run: |
+        output=$(docker run my-docker-image)
+        echo "$output"  # This will display the output in the GitHub Actions logs
+        echo "::set-output name=output::$output"  # This will set the output as a workflow output
 
     - name: Show Docker Image
       run: docker images
@@ -34,9 +33,8 @@ jobs:
     - name: Show Running Containers
       run: docker ps -a
 
-    # Optionally, stop and remove containers after testing.
-    - name: Stop Docker Container
-      run: docker stop $(docker ps -q --filter "ancestor=my-docker-image") || true
-
-    - name: Remove Docker Container
-      run: docker rm $(docker ps -a -q --filter "ancestor=my-docker-image") || true
+    - name: Use Docker Output
+      run: |
+        docker_output="${{ steps.docker.outputs.output }}"
+        echo "Docker Output: $docker_output"  # Display the captured output
+        # You can use 'docker_output' as needed in your workflow
