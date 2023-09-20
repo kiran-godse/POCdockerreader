@@ -19,12 +19,14 @@ jobs:
         dockerfile: docker/Dockerfile
 
     - name: Build Docker Image
-      run: docker build -t my-docker-image .
+      run: docker build -t my-docker-image -f docker/Dockerfile .
+      working-directory: ${{ github.workspace }}
 
     - name: Run Docker Container
-      run: docker run my-docker-image
+      run: docker run -d my-docker-image
+      # Add environment variables and port bindings as needed.
 
-    # Add additional steps here, such as running tests inside the Docker container.
+    # Add steps for testing or artifact generation within the Docker container if required.
 
     - name: Show Docker Image
       run: docker images
@@ -32,4 +34,9 @@ jobs:
     - name: Show Running Containers
       run: docker ps -a
 
-    # Add more steps as needed for your CI/CD pipeline.
+    # Optionally, stop and remove containers after testing.
+    - name: Stop Docker Container
+      run: docker stop $(docker ps -q --filter "ancestor=my-docker-image") || true
+
+    - name: Remove Docker Container
+      run: docker rm $(docker ps -a -q --filter "ancestor=my-docker-image") || true
