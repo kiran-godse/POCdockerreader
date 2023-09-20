@@ -26,14 +26,13 @@ jobs:
 
     - name: Set Python Path
       run: |
-        export PYTHONPATH=$PYTHONPATH:$GITHUB_WORKSPACE/src
+        export PYTHONPATH=$GITHUB_WORKSPACE/src:$PYTHONPATH
         echo "PYTHONPATH: $PYTHONPATH"
 
     - name: Compile and Run Tests
       run: |
         # Compile the Python test cases file
         python -m py_compile src/tests.py
-
         # Run the compiled test cases using unittest
         python -m unittest src.tests
 
