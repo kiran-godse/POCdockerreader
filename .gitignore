@@ -1,1 +1,9 @@
+# Ignore Python bytecode files
+__pycache__/
+
+# Ignore Docker image files
+*.log
+*.tar
+*.gz
+*.zip
 
