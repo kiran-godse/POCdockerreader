@@ -1,7 +1,7 @@
 # tests.py
 
 import unittest
-from src.app import add  # Use an absolute import
+from ..app import add  # Use a relative import
 
 class TestApp(unittest.TestCase):
 
