@@ -7,8 +7,11 @@ WORKDIR /app
 # Copy the current directory contents into the container at /app
 COPY . /app
 
-# Compile the Python file (replace 'your-python-file.py' with the actual filename)
+# Copy the src/app.py file into the Docker build context
+COPY src/app.py /app
+
+# Compile the Python file
 RUN python -m py_compile app.py
 
 # Specify the command to run your application
-CMD [ "python", "src/app.py" ]
+CMD [ "python", "app.py" ]
