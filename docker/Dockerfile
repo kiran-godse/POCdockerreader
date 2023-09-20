@@ -8,7 +8,7 @@ WORKDIR /app
 COPY . /app
 
 # Compile the Python file (replace 'your-python-file.py' with the actual filename)
-RUN python -m py_compile your-python-file.py
+RUN python -m py_compile app.py
 
 # Specify the command to run your application
 CMD [ "python", "src/app.py" ]
